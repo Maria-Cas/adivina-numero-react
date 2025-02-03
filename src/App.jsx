@@ -1,41 +1,38 @@
 import "./App.css";
-//react hooks
-import { useState, useRef } from "react";
-
-const number = Math.trunc(Math.random() * 20) + 1;
+// react hooks
+import { useState, useRef, useEffect } from "react";
+import Resultados from "./Resultados";
+const secretNumber = Math.trunc(Math.random() * 20) + 1;
 function App() {
   const [score, setScore] = useState(20);
   const [highscore, setHighscore] = useState(0);
+  const [guessNumber, setGuessNumber] = useState("");
   const inputRef = useRef(null);
-
   const handleCheck = () => {
-    //comprobar si el valor introducido es igual al valor introducido
-
-    console.log(inputRef.current.value);
-    const inputName = inputRef.current.value;
-    if (!inputName === number) {
-      //hemos ganado
-    } else if (inputName > number) {
-      //el valor introducido es mayor que el numero aleatorio
-      //poner mensaje 
-      setmessage('Too high!')
-    } else {
-      //el valor introducido es menor que el numero aleatorio
-      setmessage('Too low!')
-    }
-    }
-      
-    }
-    setScore(score - 1);
+    // comprobar si el valor introducido es igual al número aleatorio
+    setGuessNumber(Number(inputRef.current.value));
   };
-
+  useEffect(() => {
+    if (!Number(guessNumber)) return;
+    if (guessNumber === secretNumber) {
+      // if (score > highscore) setHighscore(score);
+      setHighscore(Math.max(score, highscore));
+    } else {
+      // el valor introducido es menor que el número aleatorio
+      setScore(score - 1);
+    }
+  }, [guessNumber]);
   return (
     <>
       <header>
         <h1>Guess My Number!</h1>
-        <p className="between">(Between 1 and 20)</p>
+        <p className="between">
+          (Between 1 and 20 but it is {secretNumber} )
+        </p>{" "}
         <button className="btn again">Again!</button>
-        <div className="number">?</div>
+        <div className="number">
+          {guessNumber === secretNumber ? secretNumber : "?"}
+        </div>
       </header>
       <main>
         <section className="left">
@@ -44,18 +41,14 @@ function App() {
             Check!
           </button>
         </section>
-        <section className="right">
-          <p className="message">Start guessing...</p>
-          <p className="label-score">
-            💯 Score: <span className="score">{score}</span>
-          </p>
-          <p className="label-highscore">
-            🥇 Highscore: <span className="highscore">{highscore}</span>
-          </p>
-        </section>
+        <Resultados
+          score={score}
+          highscore={highscore}
+          guessNumber={guessNumber}
+          secretNumber={secretNumber}
+        />
       </main>
     </>
   );
 }
-
 export default App;
