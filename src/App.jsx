@@ -1,54 +1,35 @@
 import "./App.css";
-// react hooks
-import { useState, useRef, useEffect } from "react";
-import Resultados from "./Resultados";
-const secretNumber = Math.trunc(Math.random() * 20) + 1;
+import { useState } from "react";
 function App() {
-  const [score, setScore] = useState(20);
-  const [highscore, setHighscore] = useState(0);
-  const [guessNumber, setGuessNumber] = useState("");
-  const inputRef = useRef(null);
-  const handleCheck = () => {
-    // comprobar si el valor introducido es igual al número aleatorio
-    setGuessNumber(Number(inputRef.current.value));
-  };
-  useEffect(() => {
-    if (!Number(guessNumber)) return;
-    if (guessNumber === secretNumber) {
-      // if (score > highscore) setHighscore(score);
-      setHighscore(Math.max(score, highscore));
-    } else {
-      // el valor introducido es menor que el número aleatorio
-      setScore(score - 1);
-    }
-  }, [guessNumber]);
-  return (
+  const [showModal, setShowModal] = useState(false);  const openModal = () => {
+    setShowModal(true);
+  };  const closeModal = () => {
+    setShowModal(false);
+  };  return (
     <>
-      <header>
-        <h1>Guess My Number!</h1>
-        <p className="between">
-          (Between 1 and 20 but it is {secretNumber} )
-        </p>{" "}
-        <button className="btn again">Again!</button>
-        <div className="number">
-          {guessNumber === secretNumber ? secretNumber : "?"}
-        </div>
-      </header>
-      <main>
-        <section className="left">
-          <input type="number" className="guess" ref={inputRef} />
-          <button className="btn check" onClick={handleCheck}>
-            Check!
-          </button>
-        </section>
-        <Resultados
-          score={score}
-          highscore={highscore}
-          guessNumber={guessNumber}
-          secretNumber={secretNumber}
-        />
-      </main>
+      <button className="show-modal" onClick={openModal}>
+        Show modal 1
+      </button>
+      <button className="show-modal" onClick={openModal}>Show modal 2</button>
+      <button className="show-modal" onClick={openModal}>Show modal 3</button>
+      {showModal && (
+        <>
+          <div className="modal">
+            <button className="close-modal" onClick={closeModal}>&times;</button>
+            <h1>I&apos;m a modal window :ojos_de_corazón:</h1>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit in voluptate velit esse cillum dolore eu fugiat
+              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+              sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+          </div>
+          <div className="overlay" onClick={closeModal}></div>
+        </>
+      )}
     </>
   );
-}
-export default App;
+}export default App;
